@@ -34,8 +34,8 @@ def predict_image_classification_sample(
     client_options = {"api_endpoint": api_endpoint}
     # Initialize client that will be used to create and send requests.
     # This client only needs to be created once, and can be reused for multiple requests.
-    # client = aiplatform.gapic.PredictionServiceClient(client_options=client_options, credentials=credentials)
-    client = aiplatform.gapic.PredictionServiceClient(client_options=client_options)
+    client = aiplatform.gapic.PredictionServiceClient(client_options=client_options, credentials=credentials)
+    #client = aiplatform.gapic.PredictionServiceClient(client_options=client_options)
     with open(filename, "rb") as f:
         file_content = f.read()
 
@@ -69,5 +69,5 @@ predict_image_classification_sample(
     endpoint_id=endpointID,
     location=gcpLocation,
     api_endpoint=apiEndpoint,
-    filename="daisy.jpg"
+    filename="test.jpg"
 )
