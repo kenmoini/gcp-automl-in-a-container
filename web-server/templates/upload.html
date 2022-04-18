@@ -1,0 +1,88 @@
+<!doctype html>
+
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Find a Flower</title>
+    <style type="text/css">
+      td[rowspan] {
+        vertical-align: top;
+        text-align: left;
+      }
+    </style>
+</head>
+<body>
+<h2>Upload a Flower</h2>
+<table style="width:100%">
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      <tr style="text-align:center">
+        <td colspan="2">
+          <p>
+              <ul style="display: inline-block;">
+              {% for message in messages %}
+                <li><strong>{{ message }}</strong></li>
+              {% endfor %}
+              </ul>
+          </p>
+        </td>
+      </tr>
+      {% endif %}
+    {% endwith %}
+  <tr>
+    <td rowspan="1">
+      
+  {% if response %}
+  <table>
+    <tr>
+      <td style="width:50%"><strong>AutoML API Endpoint</strong></td>
+      <td>{{ response.api_endpoint }}</td>
+    </tr>
+    <tr>
+      <td><strong>Endpoint ID</strong></td>
+      <td>{{ response.endpoint_id }}</td>
+    </tr>
+    <tr>
+      <td><strong>Model ID</strong></td>
+      <td>{{ response.prediction.deployed_model_id }}</td>
+    </tr>
+    <tr>
+      <td><strong>Model Name</strong></td>
+      <td>{{ response.prediction.model_name }}</td>
+    </tr>
+    <tr>
+      <td><strong>Predictions</strong></td>
+      <td>
+        <ul>
+          {% for prediction in response.prediction.data %}
+            <li><strong>{{ prediction.display_names|capitalize }}</strong>: {{ "%.2f"|format((prediction.confidences * 100)|float)  }}%</li>
+          {% endfor %}
+        </ul>
+      </td>
+    </tr>
+  </table>
+  {% endif %}
+      <form method="post" action="/" enctype="multipart/form-data">
+        <dl>
+          <p>
+            <input type="file" name="file" autocomplete="off" required>
+          </p>
+        </dl>
+        <p>
+          <input type="submit" value="Submit">
+        </p>
+      </form>
+    </td>
+    <td>
+      {% if filename %}
+        <div style="text-align:right">
+          <img src="{{ url_for('display_image', filename=filename) }}" style="max-width:50vw">
+        </div>
+      {% endif %}
+    </td>
+  </tr>
+</table>
+
+</body>
+</html>

@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: edge-automl-flowers-ms
+spec:
+  selector:
+    matchLabels:
+      app: edge-automl-flowers-ms
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: edge-automl-flowers-ms
+    spec:
+      terminationGracePeriodSeconds: 30
+      imagePullSecrets:
+        - name: regcred
+      containers:
+        - name: edge-automl-flowers-ms
+          imagePullPolicy: Always
+          image: ghcr.io/kenmoini/gcp-automl-in-a-container:model-server-latest
+          ports:
+            - containerPort: 8080
+              name: web

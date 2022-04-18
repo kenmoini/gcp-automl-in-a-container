@@ -51,7 +51,11 @@ sudo podman run --name automl-endpoint-client --rm -it \
 
 ## Running on OpenShift
 
+First, log into the OpenShift Developer Sandbox: https://developers.redhat.com/sandbox/get-started
+
 ```bash
+## Log in via the oc command line tool
+
 # Create an Image Pull Secret
 oc create secret generic regcred \
   --from-file=.dockerconfigjson=<path/to/.docker/config.json> \
