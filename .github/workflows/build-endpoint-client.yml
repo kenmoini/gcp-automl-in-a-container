@@ -5,6 +5,7 @@ on:
       - main
     paths:
       - endpoint-client/**
+      - .github/workflows/build-endpoint-client.yml
 jobs:
   # Build the container
   build-container:
@@ -28,7 +29,7 @@ jobs:
       with:
         # list of Docker images to use as base name for tags
         images: |
-          ghcr.io/demonslayer9000/gcp-automl-in-a-container
+          ghcr.io/kenmoini/gcp-automl-in-a-container
         # generate Docker tags based on the following events/attributes
         tags: |
           type=sha,prefix=,suffix=,format=short
