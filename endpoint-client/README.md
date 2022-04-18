@@ -52,19 +52,21 @@ sudo podman run --name automl-endpoint-client --rm -it \
 ## Running on OpenShift
 
 ```bash
-# Create a Project
-oc new-project edge-automl-flowers
+# Create an Image Pull Secret
+oc create secret generic regcred \
+  --from-file=.dockerconfigjson=<path/to/.docker/config.json> \
+  --type=kubernetes.io/dockerconfigjson
 
 # Create a Secret with a GCP Credential JSON file
-oc create secret generic gcp-credentials --from-file=gcp-service-account-file.json
+oc create secret generic gcp-credentials --from-file=sa=<path/to/gcp-service-account-file.json>
 
 # Create a Secret with the needed environmental variables for the client
 oc create secret generic edge-automl-flowers-secrets \
- --from-literal=GOOGLE_APPLICATION_CREDENTIALS="/opt/gcp-service-account-file.json" \
+ --from-literal=GOOGLE_APPLICATION_CREDENTIALS="/tmp/gcp-credentials/gcp-service-account-file.json" \
  --from-literal=GCP_PROJECT_ID=<your GCP project ID> \
  --from-literal=GCP_AI_ENDPOINT_ID=<your GCP AI Endpoint ID> \
  --from-literal=GCP_LOCATION=<your GCP region>
 
 # Deploy the Vertex AI AutoML Endpoint Client
-oc apply -f endpoint-client/deploy/
+oc apply -f deploy/
 ```

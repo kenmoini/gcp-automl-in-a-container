@@ -15,17 +15,17 @@ spec:
     spec:
       terminationGracePeriodSeconds: 30
       imagePullSecrets:
-        - name: ghcr-pull-secret
+        - name: regcred
       containers:
         - name: edge-automl-flowers-ec
           imagePullPolicy: Always
-          image: ghcr.io/demonslayer9000/gcp-automl-in-a-container:endpoint-client-latest
+          image: ghcr.io/kenmoini/gcp-automl-in-a-container:endpoint-client-latest
           ports:
             - containerPort: 8080
               name: web
           volumeMounts:
-          - name: gcp-service-account-file.json
-            mountPath: "/opt/gcp-service-account-file.json"
+          - name: gcp-credentials
+            mountPath: "/tmp/gcp-credentials/"
             readOnly: true
           env:
             - name: GOOGLE_APPLICATION_CREDENTIALS
@@ -51,9 +51,13 @@ spec:
                 secretKeyRef:
                   name: edge-automl-flowers-secrets
                   key: GCP_LOCATION
+                  optional: true
 
       volumes:
       - name: gcp-credentials
         secret:
           secretName: gcp-credentials
           optional: false
+          items:
+          - key: sa
+            path: gcp-service-account-file.json
