@@ -9,8 +9,6 @@ RUN python3 -m pip install --upgrade pip
 
 RUN python3 -m pip install --upgrade -r /opt/app-src/requirements.txt
 
-RUN chown -R 1001:1001 /opt/app-src/
-
 RUN chmod 777 /opt/app-src/static/uploads
 
 USER 1001
