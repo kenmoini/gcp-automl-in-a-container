@@ -9,9 +9,11 @@ USER root
 
 RUN dnf update -y
 
-RUN yum repolist
+RUN dnf install -y --enablerepo=ubi-8-codeready-builder https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
 
-RUN yum install --disablerepo=* --enablerepo=ubi-8-appstream --enablerepo=ubi-8-baseos --enablerepo=ubi-8-codeready-builder -y opencv
+RUN yum repolist -v
+
+RUN yum install --disablerepo=* --enablerepo=epel --enablerepo=epel-modular --enablerepo=ubi-8-appstream --enablerepo=ubi-8-baseos --enablerepo=ubi-8-codeready-builder -y python3-opencv opencv
 
 RUN python3 -m pip install --upgrade pip
 
