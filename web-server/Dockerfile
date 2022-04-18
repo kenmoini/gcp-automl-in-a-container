@@ -1,4 +1,4 @@
-FROM registry.access.redhat.com/ubi8/python-36:1-170.1648121369
+FROM docker.io/python:3.6-buster
 
 ADD main.py /opt/app-src/main.py
 ADD requirements.txt /opt/app-src/requirements.txt
@@ -7,21 +7,15 @@ ADD static/uploads/ /opt/app-src/static/uploads/
 
 USER root
 
-RUN dnf update -y
+RUN apt-get update -y
 
-RUN dnf install -y --enablerepo=ubi-8-codeready-builder https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
-
-RUN yum repolist -v
-
-RUN yum install --disablerepo=* --enablerepo=epel --enablerepo=epel-modular --enablerepo=ubi-8-appstream --enablerepo=ubi-8-baseos --enablerepo=ubi-8-codeready-builder -y python3-opencv opencv
+RUN apt-get install -y libopencv-dev python3-opencv
 
 RUN python3 -m pip install --upgrade pip
 
 RUN python3 -m pip install --upgrade -r /opt/app-src/requirements.txt
 
 WORKDIR /opt/app-src/
-
-USER root
 
 RUN chmod -R 777 /opt/app-src/static/
 
