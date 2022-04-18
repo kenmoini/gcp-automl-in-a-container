@@ -9,7 +9,9 @@ USER root
 
 RUN dnf update -y
 
-RUN yum install --enablerepo=codeready-builder-for-rhel-8-x86_64-rpms -y opencv
+RUN yum repolist
+
+RUN yum install --disablerepo=* --enablerepo=ubi-8-appstream --enablerepo=ubi-8-baseos --enablerepo=ubi-8-codeready-builder -y opencv
 
 RUN python3 -m pip install --upgrade pip
 
