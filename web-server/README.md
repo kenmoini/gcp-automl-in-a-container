@@ -2,6 +2,23 @@
 
 A simple upload form that sends an image to a model hosted on the Vertex AI Platform as an Endpoint or in an Edge Container.
 
+## Running as a Python Script
+
+```bash
+## Set the variables for use with an Edge Container
+export GCP_ENDPOINT_TYPE="edge_container"
+export GCP_AI_ENDPOINT_URL='https://edge-automl-flowers-ms-dev.apps.sandbox-m2.ll9k.p1.openshiftapps.com/v1/models/default:predict'
+
+## ORRRR....
+
+## Set the variables for use with an Endpoint Client
+export GCP_ENDPOINT_TYPE="endpoint_client"
+export GCP_AI_ENDPOINT_URL='https://edge-automl-flowers-ec-dev.apps.sandbox-m2.ll9k.p1.openshiftapps.com/predict'
+
+## Run the script
+python3 main.py
+```
+
 ## Run as a Container
 
 ### Build the Container
@@ -26,11 +43,6 @@ sudo podman run --name automl-web-server --rm \
 sudo podman run --name automl-web-server --rm \
  -e GCP_ENDPOINT_TYPE="endpoint_client" \
  -e GCP_AI_ENDPOINT_URL=<your endpoint client url> \
- -p 8080:8080 automl-web-server
-
- sudo podman run --name automl-web-server --rm \
- -e GCP_ENDPOINT_TYPE="endpoint_client" \
- -e GCP_AI_ENDPOINT_URL='https://edge-automl-flowers-ec-kmoini1-dev.apps.sandbox-m2.ll9k.p1.openshiftapps.com/predict' \
  -p 8080:8080 automl-web-server
 
 # Connecting to a Vertex AI Platform Edge Container

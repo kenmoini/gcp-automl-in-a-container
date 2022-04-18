@@ -86,18 +86,18 @@ def endpoint_predict(filename, filepath, endpoint):
         # The MultipartEncoder provides the content-type header with the boundary:
         headers={'Content-Type': mp_encoder.content_type}
     )
-    print('upload_image response: ' + response.text)
+    print('response: ' + response.text)
     return response
     
 
 
-def edge_container_predict(image_file_path, image_key, endpointURL):
+def edge_container_predict(image_file_path, image_key, endpoint):
     """Sends a prediction request to TFServing docker container REST API.
 
     Args:
         image_file_path: Path to a local image for the prediction request.
         image_key: Your chosen string key to identify the given image.
-        port_number: The port number on your device to accept REST API calls.
+        endpoint: The service that accepts REST API calls.
     Returns:
         The response of the prediction request.
     """
@@ -117,14 +117,40 @@ def edge_container_predict(image_file_path, image_key, endpointURL):
                      'key': image_key}
             ]
     }
+    # print ('instances: ' + str(instances))
 
     # This example shows sending requests in the same server that you start
     # docker containers. If you would like to send requests to other servers,
     # please change localhost to IP of other servers.
-    url = endpointURL
 
-    response = requests.post(url, data=json.dumps(instances))
-    print(response.json())
+
+    response = requests.post(endpoint, data=json.dumps(instances))
+
+
+    print("response: " + response.text)
+    print("response.json(): " + str(response.json()))
+
+    highestPrediction = 0
+    highestPredictionItem = 0
+    for i in range(0, len(response.json()["predictions"][0]["scores"])):
+        if response.json()["predictions"][0]["scores"][i] > highestPrediction:
+            highestPrediction = response.json()["predictions"][0]["scores"][i]
+            highestPredictionItem = i
+
+    
+    jsonObj = {
+        "key": image_key,
+        "api_endpoint": endpoint,
+        "prediction": {
+          "data": [{
+            "display_names": response.json()["predictions"][0]["labels"][highestPredictionItem],
+            "confidences": response.json()["predictions"][0]["scores"][highestPredictionItem]
+          }]
+        }
+    }
+
+    print("jsonObj: " + str(jsonObj))
+    return jsonObj
 
 
 def main(argv):
@@ -141,7 +167,9 @@ def main(argv):
           sys.exit()
       elif opt in ("-p", "--port"):
           port = arg.strip()
-    print ('Port is', port)
+    print ('Port: ', port)
+    print ('Endpoint type: ' + endpointType)
+    print ('Endpoint URL: ' + endpointURL)
 
     app = Flask(__name__)
     app.secret_key = "secret key"
@@ -174,7 +202,7 @@ def main(argv):
                 return render_template('upload.html', filename=filename, endpointType=endpointType, response=response.json())
             elif endpointType == "edge_container":
                 response = edge_container_predict(filepath, filename, endpointURL)
-                return render_template('upload.html', filename=filename, endpointType=endpointType, response=response.json())
+                return render_template('upload.html', filename=filename, endpointType=endpointType, response=response)
             #elif endpointType == "endpoint":
 
         else:
@@ -191,3 +219,4 @@ if __name__ == "__main__":
     main(sys.argv[1:])
 
 # [FROM https://roytuts.com/upload-and-display-image-using-python-flask/]
+# [FROM https://github.com/googleapis/python-automl/blob/main/samples/vision_edge/edge_container_predict/automl_vision_edge_container_predict.py]

@@ -63,6 +63,26 @@
       </td>
     </tr>
     {% endif %}
+    {% if endpointType == "edge_container" %}
+    <tr>
+      <td style="width:50%"><strong>AutoML Edge Container API Endpoint</strong></td>
+      <td>{{ response.api_endpoint }}</td>
+    </tr>
+    <tr>
+      <td><strong>File Key</strong></td>
+      <td>{{ response.key }}</td>
+    </tr>
+    <tr>
+      <td><strong>Predictions</strong></td>
+      <td>
+        <ul>
+          {% for prediction in response.prediction.data %}
+            <li><strong>{{ prediction.display_names|capitalize }}</strong>: {{ "%.2f"|format((prediction.confidences * 100)|float)  }}%</li>
+          {% endfor %}
+        </ul>
+      </td>
+    </tr>
+    {% endif %}
   </table>
   {% endif %}
       <form method="post" action="/" enctype="multipart/form-data">
