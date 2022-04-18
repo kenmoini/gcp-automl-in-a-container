@@ -28,7 +28,10 @@ sudo podman run --name automl-web-server --rm \
  -e GCP_AI_ENDPOINT_URL=<your endpoint client url> \
  -p 8080:8080 automl-web-server
 
-'https://edge-automl-flowers-ec-kmoini1-dev.apps.sandbox-m2.ll9k.p1.openshiftapps.com/predict'
+ sudo podman run --name automl-web-server --rm \
+ -e GCP_ENDPOINT_TYPE="endpoint_client" \
+ -e GCP_AI_ENDPOINT_URL='https://edge-automl-flowers-ec-kmoini1-dev.apps.sandbox-m2.ll9k.p1.openshiftapps.com/predict' \
+ -p 8080:8080 automl-web-server
 
 # Connecting to a Vertex AI Platform Edge Container
 sudo podman run --name automl-web-server --rm \

@@ -3,13 +3,21 @@ FROM registry.access.redhat.com/ubi8/python-36:1-170.1648121369
 ADD main.py /opt/app-src/main.py
 ADD requirements.txt /opt/app-src/requirements.txt
 ADD templates/upload.html /opt/app-src/templates/upload.html
-ADD static/uploads/readme.txt /opt/app-src/static/uploads/readme.txt
+ADD static/uploads/ /opt/app-src/static/uploads/
+
+USER root
+
+RUN dnf install -y opencv
 
 RUN python3 -m pip install --upgrade pip
 
 RUN python3 -m pip install --upgrade -r /opt/app-src/requirements.txt
 
-RUN chmod 777 /opt/app-src/static/uploads
+WORKDIR /opt/app-src/
+
+USER root
+
+RUN chmod -R 777 /opt/app-src/static/
 
 USER 1001
 

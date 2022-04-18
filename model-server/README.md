@@ -17,6 +17,32 @@ sudo podman run --name automl-model-server --rm \\
  -p 8501:8501 automl-model-server
 ```
 
+### Query the Service Running in the Container
+
+```bash
+function createJSON() {
+cat <<EOF
+{
+  "instances":
+  [
+    {
+      "image_bytes":
+      {
+        "b64": "$(base64 -w 0 $1)"
+      },
+      "key": "$(basename $1)"
+    }
+  ]
+}
+EOF
+}
+
+# createJSON test.jpg
+
+curl -X POST -d "$(createJSON test.jpg)" http://localhost:8501/v1/models/default:predict
+curl -X POST -d "$(createJSON test2.640px.jpg)" http://localhost:8501/v1/models/default:predict
+```
+
 ## Running on OpenShift
 
 First, log into the OpenShift Developer Sandbox: https://developers.redhat.com/sandbox/get-started

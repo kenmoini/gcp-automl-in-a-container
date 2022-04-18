@@ -64,6 +64,7 @@ def preprocess_image(image_file_path, max_width, max_height):
         _, processed_image = cv2.imencode('.jpg', im, encode_param)
     return base64.b64encode(processed_image).decode('utf-8')
 
+
 def endpoint_predict(filename, filepath, endpoint):
     """Sends a prediction request to TFServing docker container REST API.
 
@@ -168,12 +169,12 @@ def main(argv):
             filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
             print('upload_image filepath: ' + filepath)
 
-            if endpointType == "endpoint-client":
+            if endpointType == "endpoint_client":
                 response = endpoint_predict(filename, filepath, endpointURL)
-                return render_template('upload.html', filename=filename, response=response.json())
-            elif endpointType == "edge-container":
-                edge_container_predict(filepath, filename, endpointURL)
-                return render_template('upload.html', filename=filename, response=response.json())
+                return render_template('upload.html', filename=filename, endpointType=endpointType, response=response.json())
+            elif endpointType == "edge_container":
+                response = edge_container_predict(filepath, filename, endpointURL)
+                return render_template('upload.html', filename=filename, endpointType=endpointType, response=response.json())
             #elif endpointType == "endpoint":
 
         else:
