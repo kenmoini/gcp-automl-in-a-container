@@ -7,7 +7,9 @@ ADD static/uploads/ /opt/app-src/static/uploads/
 
 USER root
 
-RUN dnf install -y opencv
+RUN dnf update -y
+
+RUN dnf install -y opencv --enablerepo=codeready-builder-for-rhel-8-x86_64-rpms
 
 RUN python3 -m pip install --upgrade pip
 
