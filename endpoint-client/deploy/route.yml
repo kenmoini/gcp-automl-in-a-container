@@ -1,12 +1,11 @@
 kind: Route
 apiVersion: route.openshift.io/v1
 metadata:
-  name: edge-automl-flowers
-  namespace: edge-automl-flowers
+  name: edge-automl-flowers-ec
 spec:
   to:
     kind: Service
-    name: edge-automl-flowers
+    name: edge-automl-flowers-ec
     weight: 100
   port:
     targetPort: web
