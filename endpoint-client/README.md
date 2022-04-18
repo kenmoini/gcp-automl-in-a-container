@@ -48,3 +48,23 @@ sudo podman run --name automl-endpoint-client --rm -it \
  -e GCP_AI_ENDPOINT_ID=<your GCP AI Endpoint ID> \
  automl-endpoint-client python3 /opt/app-src/main.py -f /opt/app-src/test.jpg
 ```
+
+## Running on OpenShift
+
+```bash
+# Create a Project
+oc new-project edge-automl-flowers
+
+# Create a Secret with a GCP Credential JSON file
+oc create secret generic gcp-credentials --from-file=gcp-service-account-file.json
+
+# Create a Secret with the needed environmental variables for the client
+oc create secret generic edge-automl-flowers-secrets \
+ --from-literal=GOOGLE_APPLICATION_CREDENTIALS="/opt/gcp-service-account-file.json" \
+ --from-literal=GCP_PROJECT_ID=<your GCP project ID> \
+ --from-literal=GCP_AI_ENDPOINT_ID=<your GCP AI Endpoint ID> \
+ --from-literal=GCP_LOCATION=<your GCP region>
+
+# Deploy the Vertex AI AutoML Endpoint Client
+oc apply -f endpoint-client/deploy/
+```
