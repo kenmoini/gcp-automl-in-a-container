@@ -4,4 +4,5 @@ ADD saved_model.pb /tmp/mounted_model/0001/saved_model.pb
 
 USER 1001
 
+EXPOSE 8500
 EXPOSE 8501
